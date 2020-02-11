@@ -95,21 +95,18 @@ You can run this locally on a machine you have `gcloud` and `node` installed and
 
 ```
 gcloud config set project [PROJECT_NAME]
-
 ```
 
 2. Install node modules:
 
 ```
 npm install
-
 ```
 
 4. Create the binary:
 
 ```
 npm run package
-
 ```
 
 5. Run the binary:
@@ -119,7 +116,6 @@ eeg3@mars:~/Code/df-time-limit$ ./bin/df-time-limit -l 0 -r us-central1
 Checking for jobs that exceed configured maximum duration (0) within us-central1...
 
 No jobs exceeding maximum duration found.
-
 ```
 
 ### Testing entire workflow through Cloud Composer with a sample Dataflow Job
