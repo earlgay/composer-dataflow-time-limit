@@ -1,10 +1,10 @@
-# Dataflow Time Limit
+# Composer: Dataflow Time Limit
 
-This application is designed to check Dataflow jobs within a region and cancel any that run beyond a predefined maximum duration. It can be invoked manually, but two [Cloud Composer](https://cloud.google.com/composer) DAGs have been created to allow it to be ran on a schedule; the DAG to use is based on user preference ([BashOperator](https://airflow.apache.org/docs/stable/_api/airflow/operators/bash_operator/index.html#module-airflow.operators.bash_operator) or [KubernetesPodOperator](https://cloud.google.com/composer/docs/how-to/using/using-kubernetes-pod-operator)).
+This application is designed to check Dataflow jobs within a region and cancel any that run beyond a predefined maximum duration. It can be invoked manually, but two [Cloud Composer](https://cloud.google.com/composer) DAGs have been created within the `composer/` folder to allow it to be ran on a schedule; the DAG to use is based on user preference ([BashOperator](https://airflow.apache.org/docs/stable/_api/airflow/operators/bash_operator/index.html#module-airflow.operators.bash_operator) or [KubernetesPodOperator](https://cloud.google.com/composer/docs/how-to/using/using-kubernetes-pod-operator)).
 
 ## How to Deploy
 
-## Pre-requisites
+### Pre-requisites
 
 1. Run `npm install` to install code dependencies.
 2. Run `npm run package` to create the command-line binary.
@@ -30,7 +30,7 @@ gcloud composer environments storage dags import \
   --destination df-time-limit/
 ```
 
-4. Import the DAG to Cloud Composer:
+6. Import the DAG to Cloud Composer:
 
 ```
 gcloud composer environments storage dags import \
@@ -53,12 +53,12 @@ Further documentation:
 ### Option 2: Cloud Composer - KubernetesPodOperator
 
 1. Run `gcloud builds submit --tag gcr.io/[PROJECT-NAME]/df-time-limit:latest .`
-1. Edit `composer/df_time_limit_k8s_dag.py`, and modify `schedule_interval` on line 9 according to how often you'd like the check to run.
-1. Edit `composer/df_time_limit_k8s_dag.py`, and modify `params` starting on line 10:
-1. Within `params`, configure `TIME_LIMIT` to the maximum time limit to allow Dataflow jobs to run (in minutes). For example, enter 1440 for 1 day.
-1. Within `params`, configure `REGION` to the region where the Dataflow jobs reside (e.g. `us-central1`).
-1. Within `params`, configure `PROJECT` to [PROJECT-NAME].
-1. Import the DAG to Cloud Composer:
+2. Edit `composer/df_time_limit_k8s_dag.py`, and modify `schedule_interval` on line 9 according to how often you'd like the check to run.
+3. Edit `composer/df_time_limit_k8s_dag.py`, and modify `params` starting on line 10:
+4. Within `params`, configure `TIME_LIMIT` to the maximum time limit to allow Dataflow jobs to run (in minutes). For example, enter 1440 for 1 day.
+5. Within `params`, configure `REGION` to the region where the Dataflow jobs reside (e.g. `us-central1`).
+6. Within `params`, configure `PROJECT` to [PROJECT-NAME].
+7. Import the DAG to Cloud Composer:
 
 ```
 gcloud composer environments storage dags import \
@@ -94,7 +94,6 @@ You can run this locally on a machine you have `gcloud` and `node` installed and
 1. Make sure `gcloud` is configured to point to the project you want this deployed:
 
 ```
-
 gcloud config set project [PROJECT_NAME]
 
 ```
@@ -102,7 +101,6 @@ gcloud config set project [PROJECT_NAME]
 2. Install node modules:
 
 ```
-
 npm install
 
 ```
@@ -110,7 +108,6 @@ npm install
 4. Create the binary:
 
 ```
-
 npm run package
 
 ```
@@ -158,3 +155,8 @@ INFO:apache_beam.runners.dataflow.dataflow_runner:Job 2020-02-11_14_41_13-541244
 ```
 
 5. Go to the Dataflow console, and you should see "Canceled" under the "Status" column for the job that was created. If so, dataflow-time-limit successfully canceled the job.
+
+## FAQ
+
+-   **Q:** I am receiving an error: `Unable to obtain list of dataflow jobs.`
+-   **A:** Ensure the Dataflow API is actually enabled: `gcloud services enable dataflow.googleapis.com`. The service also assumes Cloud Composer is using a service account that has permission to cancel dataflow jobs. The particular service account in use can be checked through: `gcloud composer environments describe [COMPOSER_ENVIRONMENT_NAME]--location [REGION] | grep serviceAccount`.
