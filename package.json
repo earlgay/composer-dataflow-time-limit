@@ -1,0 +1,28 @@
+{
+    "name": "df-time-limit",
+    "version": "0.1.0",
+    "description": "Dataflow job time limiter",
+    "main": "index.js",
+    "bin": {
+        "df-time-limit": "./index.js"
+    },
+    "pkg": {
+        "targets": [
+            "node10-linux"
+        ]
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "package": "pkg . --output=bin/df-time-limit"
+    },
+    "author": "Earl Gay",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "commander": "^4.1.1",
+        "express": "^4.17.1",
+        "timediff": "^1.1.1"
+    },
+    "devDependencies": {
+        "pkg": "^4.4.2"
+    }
+}
