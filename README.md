@@ -2,6 +2,8 @@
 
 This application is designed to check Dataflow jobs within a region and cancel any that run beyond a predefined maximum duration. It can be invoked manually, but two [Cloud Composer](https://cloud.google.com/composer) DAGs have been created within the `composer/` folder to allow it to be ran on a schedule; the DAG to use is based on user preference ([BashOperator](https://airflow.apache.org/docs/stable/_api/airflow/operators/bash_operator/index.html#module-airflow.operators.bash_operator) or [KubernetesPodOperator](https://cloud.google.com/composer/docs/how-to/using/using-kubernetes-pod-operator)).
 
+** Disclaimer: This is not an officially supported Google project. **
+
 ## How to Deploy
 
 ### Pre-requisites
